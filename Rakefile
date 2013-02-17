@@ -17,9 +17,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "spree-bootstrap"
   gem.homepage = "http://github.com/JHanley85/spree-bootstrap"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "jack@caged-media.com"
+  gem.summary = %Q{A theme for spreecommerce using twitter's bootstrap based on Andrewmp1's spree_bootstrap_theme}
+  gem.description = %Q{A theme for spreecommerce using twitter's bootstrap based on Andrewmp1's spree_bootstrap_theme}
+  gem.email = "jack@cagedmedia.com"
   gem.authors = ["John Hanley"]
   # dependencies defined in Gemfile
 end
@@ -32,13 +32,13 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
-end
+#require 'rcov/rcovtask'
+#Rcov::RcovTask.new do |test|
+#  test.libs << 'test'
+#  test.pattern = 'test/**/test_*.rb'
+#  test.verbose = true
+#  test.rcov_opts << '--exclude "gems/*"'
+#end
 
 task :default => :test
 
