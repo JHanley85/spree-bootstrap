@@ -1,0 +1,45 @@
+<body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-hook="body">
+
+<header id="header" class="" data-hook>
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <%= render :partial=>'spree/shared/store_header'%>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="wrapper" class="" data-hook>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <% if content_for?(:sidebar) %>
+        <aside id="sidebar" class="span2" data-hook>
+          <%= yield :sidebar %>
+        </aside>
+      <% end %>
+
+      <div id="content" class="<% if !content_for?(:sidebar) %>span12<% else %>span10<% end %>" data-hook>
+        <%= breadcrumbs(@taxon) %>
+        <%= flash_messages %>
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="footer" data-hook>
+  <div class="container-fluid">
+    <div id="footer-left" class="span6" data-hook>
+      <p><%= t(:powered_by) %> <%= link_to 'Spree', 'http://spreecommerce.com/' %></p>
+    </div>
+    <div id="footer-right" class="span6" data-hook></div>
+  </div>
+</footer>
+
+
+</div>
+
+<%= render :partial => 'spree/shared/google_analytics' %>
+
+</body>
