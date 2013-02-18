@@ -1,0 +1,7 @@
+<h1>Variable File:<%=@file%></h1>
+
+<%= form_tag('/admin/store_themes/update', :method=>:post) do%>
+    <%= text_area_tag "variables", @contents, :rows=>150,:cols=>540%>
+    <%= submit_tag "Save" %>
+    <% end %>
+<p><%=debug @contents.html_safe %></p>

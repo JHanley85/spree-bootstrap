@@ -1,5 +1,11 @@
 require 'spree_core'
-require 'spree_bootstrap/engine'
+require 'sass-rails'
+require 'sass'
+require 'rails-settings-cached'
+require 'spree-bootstrap/engine'
+require 'spree-bootstrap/config'
+require 'spree-bootstrap/importer'
 require 'bootstrap-sass'
+
 
 

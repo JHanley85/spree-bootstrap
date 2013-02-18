@@ -1,6 +1,8 @@
-<header id="header" class="row" data-hook>
+<header id="header " class="row" data-hook>
   <div id="location-bar" class="span4">
-    <h5>1400 Polk St</h5><p>
+    <h5>1400 Polk Street</h5>
+
+    <p>
       (between Pine St & California St)
       San Francisco, CA 94109
       Neighborhood: Nob Hill</p>
@@ -8,64 +10,62 @@
   <figure id="logo" class="span4" data-hook><a href="/>">
     <div id="logo-img"></div>
   </a></figure>
-  <div class='span12 pull-right'>
+  <div class='span16 pull-right'>
     <nav id="top-nav-bar row fluid" class="">
       <div class='row-fluid'>
-        <ul id="nav-bar" class="nav nav-pills span12" data-hook>
-          <span class='span10'>
-            <div class="nav-collapse collapse navbar-responsive-collapse">
-              <ul class="nav">
-                <li class='map-info'><a href='#'>Map</a></li>
-                <li class="active"><a href="#">Home</a></li>
-                <li class="divider-vertical"></li>
-                <li><a href="#">About</a></li>
-                <li class="divider-vertical"></li>
-                <li><a href="#">Contact</a></li>
-                <li class="divider-vertical"></li>
-                <li><a href="#">Request</a></li>
-                <li class="divider-vertical"></li>
-                <li id="home-link" data-hook></span><%= link_to "<span class='icon-hand-up'></span>#{t(:home)}".html_safe, root_path %></li>
-          <li id="link-to-cart" data-hook><%= link_to_bs_cart %></li>
+        <ul id="nav-bar" class="nav nav-pills" data-hook>
+          <div class="nav-collapse collapse navbar-responsive-collapse">
+            <ul class="nav">
+              <li class='map-info'><a href='#'>Map</a></li>
+              <li class="active"><a href="#">Home</a></li>
+              <li class="divider-vertical"></li>
+              <li><a href="#">About</a></li>
+              <li class="divider-vertical"></li>
+              <li><a href="#">Contact</a></li>
+              <li class="divider-vertical"></li>
+              <li><a href="#">Request</a></li>
+              <li class="divider-vertical"></li>
+              <li id="home-link" data-hook></span><%= link_to "<span class='icon-hand-up'></span>#{t(:home)}".html_safe, root_path %></li>
+              <li id="link-to-cart" data-hook><%= link_to_bs_cart %></li>
 
-          <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Shop<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li class="nav-header">Top Stuff</li>
-                <% if defined? get_taxonomies %>
-                    <% get_taxonomies.each do |taxonomy| %>
-                        <li class="nav nav-list"><%= t(:shop_by_taxonomy, :taxonomy => taxonomy.name) %>
-                          <%= taxons_tree_bs(taxonomy.root, @taxon, Spree::Config[:max_level_in_taxons_menu] || 1) %>
-                        </li>
-                    <% end %>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Shop<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="nav-header">Top Stuff</li>
+                  <% if defined? get_taxonomies %>
+                      <% get_taxonomies.each do |taxonomy| %>
+                          <li class="nav nav-list"><%= t(:shop_by_taxonomy, :taxonomy => taxonomy.name) %>
+                            <%= taxons_tree_bs(taxonomy.root, @taxon, Spree::Config[:max_level_in_taxons_menu] || 1) %>
+                          </li>
+                      <% end %>
+                  <% end %>
+                  <li><a href="#">Sit</a></li>
+                  <li><a href="#">Amet</a></li>
+                  <li><a href="#">Dolor</a></li>
+                  <li class="divider"></li>
+                  <li class="nav-header">Other Stuff</li>
+                  <li><a href="#">Foo</a></li>
+                  <li><a href="#">Bar</a></li>
+                  <li><a href="#">Bat</a></li>
+                </ul>
+              </li>
+              <li id="navbar-search" data-hook>
+                <% @taxons = @taxon && @taxon.parent ? @taxon.parent.children : Spree::Taxon.roots %>
+                <%= form_tag products_path, :method => :get do %>
+                    <%= select_tag :taxon,
+                                   options_for_select([[t(:all_departments), '']] +
+                                                              @taxons.map { |t| [t.name, t.id] },
+                                                      @taxon ? @taxon.id : params[:taxon]) %>
+                    <%= search_field_tag :keywords, params[:keywords], :placeholder => t(:search) %>
+                    <%= submit_tag t(:search), :name => 'test', :class => 'btn btn-standard' %>
                 <% end %>
-                <li><a href="#">Sit</a></li>
-                <li><a href="#">Amet</a></li>
-                <li><a href="#">Dolor</a></li>
-                <li class="divider"></li>
-                <li class="nav-header">Other Stuff</li>
-                <li><a href="#">Foo</a></li>
-                <li><a href="#">Bar</a></li>
-                <li><a href="#">Bat</a></li>
-              </ul>
-            </li>
-                  </ul>
+              </li>
+            </ul>
 
 
-            </div>
-            </span>
-          <span class='span4 pull-right'>
-          <li id="navbar-search" data-hook>
-            <% @taxons = @taxon && @taxon.parent ? @taxon.parent.children : Spree::Taxon.roots %>
-            <%= form_tag products_path, :method => :get do %>
-                <!--    <%= select_tag :taxon,
-                                       options_for_select([[t(:all_departments), '']] +
-                                                                  @taxons.map { |t| [t.name, t.id] },
-                                                          @taxon ? @taxon.id : params[:taxon]) %>-->
-                <%= search_field_tag :keywords, params[:keywords], :placeholder => t(:search) %>
-                <%= submit_tag t(:search), :name => 'test', :class => 'btn btn-standard' %>
-            <% end %>
-          </li>
-          </span>
+          </div>
+        </ul>
+      </div>
     </nav>
   </div>
 </header>

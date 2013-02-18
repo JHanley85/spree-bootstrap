@@ -1,6 +1,6 @@
-module SpreeBootstrapTheme
+module SpreeBootstrap
   class Engine < Rails::Engine
-    engine_name 'spree_bootstrap_theme'
+    engine_name 'spree_bootstrap'
 
     config.autoload_paths += %W(#{config.root}/lib)
 
@@ -16,6 +16,16 @@ module SpreeBootstrapTheme
 
       # Load extension's view overrides
       Dir.glob(File.join(File.dirname(__FILE__), "../../app/overrides/*.rb")) do |c|
+        Rails.configuration.cache_classes ? require(c) : load(c)
+      end
+      # Load extension's models
+      Dir.glob(File.join(File.dirname(__FILE__), "../../app/models/*.rb")) do |c|
+        Rails.configuration.cache_classes ? require(c) : load(c)
+      end
+      Dir.glob(File.join(File.dirname(__FILE__), "../../app/controllers/*.rb")) do |c|
+        Rails.configuration.cache_classes ? require(c) : load(c)
+      end
+      Dir.glob(File.join(File.dirname(__FILE__), "../../app/controllers/spree/admin/.rb")) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
     end

@@ -6,6 +6,7 @@ Deface::Override.new(:virtual_path => %q{spree/shared/products},
                      :set_attributes => %q{ul#products},
                      :disabled => false,
                      :attributes => {:class => 'product-listing thumbnails'})
+=begin
 Deface::Override.new(:virtual_path => %q{spree/shared/products},
                      :name => %{add_class_thumbnails_to_index-listings},
                      :replace => %q{ul#products},
@@ -28,10 +29,11 @@ Deface::Override.new(:virtual_path => %q{spree/shared/products},
 </div>
   <% reset_cycle("classes") %>
 </ul>},)
+=end
 Deface::Override.new(:virtual_path => %q{spree/shared/_products},
                      :name => %{add_div_span_class_thumbnails_to_product_listings},
                      :replace => %q{[data-hook='products_list_item']},
-                     :text => %{<li class='span2'><div id="product_<%= product.id %>" class="span2" <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product"> <div class="product-image thumbnail"><%= link_to small_image(product, :itemprop => "image"), product, :itemprop => 'url' %><%= link_to truncate(product.name, :length => 50), product, :class => 'caption', :itemprop => "name", :title => product.name %><span class="price selling" itemprop="price"><%= product.price_in(current_currency).display_price %></span></div></div></li>})
+                     :text => %{<li class='span2 thumbnails'><div id="product_<%= product.id %>" class="span2" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product"> <div class="product-image thumbnail"><%= link_to small_image(product, :itemprop => "image"), product, :itemprop => 'url' %><%= link_to truncate(product.name, :length => 50), product, :class => 'caption', :itemprop => "name", :title => product.name %><span class="price selling" itemprop="price"><%= product.price_in(current_currency).display_price %></span></div></div></li>})
 
 Deface::Override.new(:virtual_path => %q{spree/shared/_products},
                      :name => %{add_class_thumbnails_to_product_listings},
