@@ -1,6 +1,10 @@
-
-<div class="row-fluid">
-  <div id="homeCarousel" class="carousel span8 well">
+<% content_for :sidebar do %>
+    <div data-hook="homepage_sidebar_navigation">
+      <%= render :partial => 'spree/shared/taxonomies' %>
+    </div>
+<% end %>
+<div class="row-fluid span12">
+  <div id="homeCarousel" class="carousel well">
     <div class="carousel-inner">
       <% if @products.any? %>
           <% @products.limit(3).each do |product| %>

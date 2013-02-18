@@ -1,3 +1,4 @@
+
 <body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-hook="body">
 <header id="header" class="" data-hook>
   <div class="navbar">
@@ -12,8 +13,9 @@
 <div id="wrapper" class="" data-hook>
   <div class="container-fluid">
     <div class="row-fluid">
+
       <% if content_for?(:sidebar) %>
-        <aside id="sidebar" class="span2" data-hook>
+        <aside id="sidebar2" class="span2" data-hook>
           <%= yield :sidebar %>
         </aside>
       <% end %>
