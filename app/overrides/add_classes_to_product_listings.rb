@@ -8,7 +8,7 @@ Deface::Override.new(:virtual_path => %q{spree/shared/_products},
 
   <%= link_to truncate(product.name, :length => 50), product, :itemprop => "name", :title => product.name %>
   <span class="price selling" itemprop="price">
-    <%= product.price_in(current_currency).display_price %>
+    <%= product.price_in(current_currency).display_price unless product.price_in(current_currency).display_price.gsub(/[^0-9]/, "")=='000'%>
   </span></li>})
 
 Deface::Override.new(:virtual_path => %q{spree/shared/_products},

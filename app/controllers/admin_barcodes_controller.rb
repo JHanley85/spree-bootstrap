@@ -3,7 +3,7 @@ module Spree
     class BarcodesController < ApplicationController
       require 'g-data'
       require 'uri'
-      before_filter :check_for_mobile, :only => [:new, :edit]
+      #before_filter :check_for_mobile, :only => [:new, :edit]
 
       # GET /Barcodes
       # GET /Barcodes.json
@@ -26,7 +26,7 @@ module Spree
       # GET /Barcodes/1
       # GET /Barcodes/1.json
       def show
-        @barcode = Barcodes.find(params[:id])
+        @barcode = Barcode.find(params[:id])
 
         respond_to do |format|
           format.html # show.html.erb
@@ -39,11 +39,11 @@ module Spree
       def get_data
         @barcode=params[:upc]
         if !params[:token]
-          token=current_user.spree_api_token
+          token=current_user.spree_api_key
         else
           token=params[:token]
         end
-        @data=GData.new().store(params[:upc])
+        @data=GData.new().google_store(params[:upc])
 
         #@data=GData::UPCDB.new(params[:upc])
 
@@ -56,7 +56,7 @@ module Spree
       end
 
       def new
-        @barcode = Barcodes.new
+        @barcode = Barcode.new
 
         respond_to do |format|
           format.html # new.html.erb
@@ -66,13 +66,13 @@ module Spree
 
       # GET /Barcodes/1/edit
       def edit
-        @barcode = Barcodes.find(params[:id])
+        @barcode = Barcode.find(params[:id])
       end
 
       # POST /Barcodes
       # POST /Barcodes.json
       def create
-        @barcode = Barcodes.new(params[:upc])
+        @barcode = Barcode.new(params[:upc])
 
         respond_to do |format|
           if @barcode.save
@@ -88,7 +88,7 @@ module Spree
       # PUT /Barcodes/1
       # PUT /Barcodes/1.json
       def update
-        @barcode = Barcodes.find(params[:id])
+        @barcode = Barcode.find(params[:id])
 
         respond_to do |format|
           if @barcode.update_attributes(params[:upc])
@@ -104,11 +104,11 @@ module Spree
       # DELETE /Barcodes/1
       # DELETE /Barcodes/1.json
       def destroy
-        @barcode = Barcodes.find(params[:id])
-        @Barcodes.destroy
+        @barcode = Barcode.find(params[:id])
+        @barcodes.destroy
 
         respond_to do |format|
-          format.html { redirect_to Barcodes_url }
+          format.html { redirect_to admin_barcodes_url }
           format.json { head :no_content }
         end
       end

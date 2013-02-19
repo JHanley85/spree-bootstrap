@@ -1,9 +1,9 @@
-<%= form_for(@upc) do |f| %>
-    <% if @upc.errors.any? %>
+<%= form_for(@barcode, :url=>new_admin_barcode_path) do |f| %>
+    <% if @barcode.errors.any? %>
         <div id="error_explanation">
-          <h2><%= pluralize(@upc.errors.count, "error") %> prohibited this upc from being saved:</h2>
+          <h2><%= pluralize(@barcode.errors.count, "error") %> prohibited this upc from being saved:</h2>
           <ul>
-            <% @upc.errors.full_messages.each do |msg| %>
+            <% @barcode.errors.full_messages.each do |msg| %>
                 <li><%= msg %></li>
             <% end %>
           </ul>
@@ -24,8 +24,8 @@
     </table>
     <%#= f.button "Add To Inventory",:id=>'button-commit',:style=>"display:none;",:type=>'button'%>
     <script type="text/javascript" charset="utf-8">
-        $('#new_upc').validate({  debug:true,
-            rules:{'upc[code]':{required:true}
+        $('#new_barcode').validate({  debug:true,
+            rules:{'admin_barcodes[code]':{required:true}
             }
         });
         $()
@@ -35,10 +35,10 @@
         $("#button-data").click(function () {
             $('#button-data').show();
             $('#button-commit').hide();
-            var upc = $('#upc_code').val().replace(/\s/g,'');
-            var loadUrl = '<%="/upcs/get_data/"%>' + upc + '.json?token=e69bc24cd77a694363d12c562add29d0c9aa10b1e0d5f764';
+            var upc = $('#barcode_code').val().replace(/\s/g,'');
+            var loadUrl = '<%="/admin/barcodes/get_data/"%>' + upc + '.json?token=e69bc24cd77a694363d12c562add29d0c9aa10b1e0d5f764';
             set_defaults();
-            $('#upc_code').val(upc);
+            $('#barcode_code').val(upc);
             $.ajax({
                 type:"GET",
                 url:loadUrl,
@@ -66,14 +66,15 @@
             //$('#_admin_products_description').val(data.product.description);
             $('#products_name').val(data.product['title']);
             $('#products_description').val(data.product['description']);
-            $('#products_brand').val(data.product.brand);
-            $('#products_sku').val($('#upc_code').val());
+            $('#products_brand').val(data.product['brand']);
+            if (data.product['category']){$('#products_category').val(data.product['category'])}else{$('#products_category').val('Uncategorized'};
+            $('#products_sku').val($('#barcode_code').val($('#barcode_code')));
             $('#products_price').val(0.00);
             window.data = data;
         }
         function set_defaults() {
             document.getElementById('res-img').innerHTML = "Image";
-            $('#upc_code').val(null);
+            $('#barcode_code').val(null);
             $('#products_name').val(null);
             $('#products_description').val(null);
             $('#products_brand').val(null);
@@ -87,8 +88,10 @@
             var price = $('#products_price').val();
             var sku = $('#products_sku').val();
             var description = $('#products_description').val();
+            var brand = $('#products_brand').val();
+            var category = $('#products_category').val();
             var loadurl='/api/products'
-            var data="token=" + token + "&product[name]=" + name + "&product[description]=" + description + "&product[price]=" + price + "&product[sku]=" + sku;
+            var data="token=" + token + "&product[name]=" + name + "&product[description]=" + description + "&product[price]=" + price + "&product[sku]=" + sku +"&product[brand]=" + brand+"&product[category]=" + category;
             $.ajax({
                 type:"POST",
                 url:loadurl,
@@ -129,6 +132,14 @@
           <td>
             <%= f.label :price, (:master_price) %> <span class="required">*</span></td>
           <td><%= f.text_field :price %>
+          </td>
+          <td>
+            <%= f.label :brand, (:brand) %></td>
+          <td><%= f.text_field :brand %>
+          </td>
+          <td>
+          <%= f.label :category, (:category) %></td>
+          <td><%= f.text_field :category %>
           </td>
         </tr>
 
