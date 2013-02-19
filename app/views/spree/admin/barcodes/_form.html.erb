@@ -1,0 +1,144 @@
+<%= form_for(@upc) do |f| %>
+    <% if @upc.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@upc.errors.count, "error") %> prohibited this upc from being saved:</h2>
+          <ul>
+            <% @upc.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <table>
+      <tr>
+        <td colspan='3'>
+          <button id='reset-form' onclick='set_defaults();' type='button' style="width:100%; margin :0 auto;">Reset</button>
+        </td>
+      </tr>
+      <tr>
+        <td><%= f.label :UPC_CODE %></td>
+        <td> <%= f.text_field :code %></td>
+        <td><%= f.button "Get Data", :id => 'button-data', :type => 'button', :style => "width:100%; margin :0 auto;" %></td>
+
+      </tr>
+    </table>
+    <%#= f.button "Add To Inventory",:id=>'button-commit',:style=>"display:none;",:type=>'button'%>
+    <script type="text/javascript" charset="utf-8">
+        $('#new_upc').validate({  debug:true,
+            rules:{'upc[code]':{required:true}
+            }
+        });
+        $()
+
+
+        var ajax_load = "<img src='/assets/loading.gif' alt='loading...' />";
+        $("#button-data").click(function () {
+            $('#button-data').show();
+            $('#button-commit').hide();
+            var upc = $('#upc_code').val().replace(/\s/g,'');
+            var loadUrl = '<%="/upcs/get_data/"%>' + upc + '.json?token=e69bc24cd77a694363d12c562add29d0c9aa10b1e0d5f764';
+            set_defaults();
+            $('#upc_code').val(upc);
+            $.ajax({
+                type:"GET",
+                url:loadUrl,
+                //data: "id=" + id, // appears as $_GET['id'] @ ur backend side
+                success:function (data) {
+                    // data is ur summary
+                    $('#results').append(data);
+                    report_data(data);
+                    $.loading(false);
+                }
+            });
+        });
+        function report_data(data) {
+            /* var name = "<input value='" + data.product['title'] + "'></input>";
+             var UPC = "<input value='" + $('#upc_code').val() + "'></input>";
+             var price = "<input value='0.00'/> *defaults, prices at 0.00 will not show in store.";
+             */
+            var image = "<img src='" + data.product.images[0].link + "'/>";
+            $('#res-img').html($('#res-img').text().replace(/Image/, image));
+            /* $('#res-nam').html($('#res-nam').text().replace(/Name/, name));
+
+             $('#res-upc').html($('#res-upc').text().replace(/UPC/, UPC));
+             $('#res-pri').html($('#res-pri').text().replace(/Price/, price));*/
+            $('#res-action').html("<button style='width:100%; margin :0 auto;'>Process Item</button>");
+            //$('#_admin_products_description').val(data.product.description);
+            $('#products_name').val(data.product['title']);
+            $('#products_description').val(data.product['description']);
+            $('#products_brand').val(data.product.brand);
+            $('#products_sku').val($('#upc_code').val());
+            $('#products_price').val(0.00);
+            window.data = data;
+        }
+        function set_defaults() {
+            document.getElementById('res-img').innerHTML = "Image";
+            $('#upc_code').val(null);
+            $('#products_name').val(null);
+            $('#products_description').val(null);
+            $('#products_brand').val(null);
+            $('#products_sku').val(null);
+            $('#products_price').val(null);
+            window.data = null;
+        }
+        function send_to_api() {
+            var token = '<%=current_user.spree_api_key%>';
+            var name = $('#products_name').val();
+            var price = $('#products_price').val();
+            var sku = $('#products_sku').val();
+            var description = $('#products_description').val();
+            var loadurl='/api/products'
+            var data="token=" + token + "&product[name]=" + name + "&product[description]=" + description + "&product[price]=" + price + "&product[sku]=" + sku;
+            $.ajax({
+                type:"POST",
+                url:loadurl,
+                data:data,
+                success:function (response) {
+                    // data is ur summary
+                    $.ajax({
+                        type:"GET",
+                        url:"attach_image/"+response.id,
+                        data: "location="+encodeURI(window.data.product.images[0].link)});
+                    $.loading(false);
+                }
+            });
+
+
+        }
+        $('#to_product_api').click(function(){send_to_api();});
+    </script>
+<% end %>
+<%= form_for 'products', :url => '/admin/products/' do |f| %>
+
+    <div id='results'>
+      <table>
+        <tr>
+          <td rowspan="5" id='res-img'>Image</td>
+          <td><%= f.label :brand, (:brand) %> </td>
+          <td><%= f.text_field :brand %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :name, (:name) %> <span class="required">*</span></td>
+          <td><%= f.text_field :name %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :sku, (:sku) %></td>
+          <td><%= f.text_field :sku, :size => 16 %></td>
+        </tr>
+        <tr>
+          <td>
+            <%= f.label :price, (:master_price) %> <span class="required">*</span></td>
+          <td><%= f.text_field :price %>
+          </td>
+        </tr>
+
+        <tr>
+          <td><%= f.label :description, (:description) %> <span class="required">*</span></td>
+          <td><%= f.text_field :description %> </td>
+        </tr>
+
+      </table>
+    </div>
+    </fieldset>
+    <%= f.button :id => 'to_product_api', :type => 'button' ,:style=>'width:100%',:onclick=>'send_to_api();'%>
+<% end %>
